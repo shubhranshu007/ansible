@@ -1,0 +1,30 @@
+---
+- hosts: tmp
+  remote_host: sysops
+  become: yes
+  tasks:
+  - name: install nginx
+    yum:
+      name: nginx
+      state: installed
+      
+  - name: copy nginx config file
+    copy:
+      src: ./nginx.conf
+      dest: /etc/nginx/
+      
+      
+  - name: restart nginx service
+    service:
+      name: nginx
+      stated: restarted
+      enabled: yes
+      
+   - name: print status
+     shell: service nginx status
+     register: nginx_status
+     
+   - debug: msg="{{nginx_status.stdout}}"
+
+      
+  
